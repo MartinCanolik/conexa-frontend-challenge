@@ -1,10 +1,11 @@
 "use client";
 
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import CharactersCard from "./characterCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export interface Character {
 	id: number;
@@ -37,10 +38,12 @@ export default function CharacterContainer({
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value);
 	};
-	console.log(searchTerm);
+
+	const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
 	const fetchCharacters = async ({ pageParam = 1 }) => {
-		const searchQuery = searchTerm
-			? `&name=${encodeURIComponent(searchTerm)}`
+		const searchQuery = debouncedSearchTerm
+			? `&name=${encodeURIComponent(debouncedSearchTerm)}`
 			: "";
 		const response = await fetch(
 			`https://rickandmortyapi.com/api/character/?page=${pageParam}${searchQuery}`
@@ -52,6 +55,7 @@ export default function CharacterContainer({
 
 		return response.json();
 	};
+
 	const {
 		data,
 		fetchNextPage,
@@ -61,7 +65,7 @@ export default function CharacterContainer({
 		isError,
 		error,
 	} = useInfiniteQuery({
-		queryKey: ["characters", searchTerm],
+		queryKey: ["characters", debouncedSearchTerm],
 		queryFn: fetchCharacters,
 		getNextPageParam: (lastPage) => {
 			return lastPage.info.next
@@ -108,20 +112,23 @@ export default function CharacterContainer({
 				/>
 				<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
-			<ScrollArea className='grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[600px] pr-2'>
-				{characters?.map((character, idx) => {
-					const isLastPage = idx === characters.length - 1;
-					return (
-						<>
-							{isLastPage && <div ref={lastCharacterRef}></div>}
-
-							<div key={character.id}>
-								<CharactersCard {...character} />
-							</div>
-						</>
-					);
-				})}
-			</ScrollArea>
+			{characters.length === 0 ? (
+				<div className='text-center py-8'>No characters found</div>
+			) : (
+				<ScrollArea className='grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[600px] pr-2'>
+					{characters?.map((character, idx) => {
+						const isLastCard = idx === characters.length - 1;
+						return (
+							<>
+								<div key={character.id}>
+									<CharactersCard {...character} />
+								</div>
+								{isLastCard && <div ref={lastCharacterRef}></div>}
+							</>
+						);
+					})}
+				</ScrollArea>
+			)}
 			{isFetchingNextPage && (
 				<div className='col-span-2 text-center py-4'>Loading more...</div>
 			)}
