@@ -18,8 +18,11 @@ export default function CharactersCard(character: Character) {
 				/>
 			</div>
 			<div className='w-2/3 border-2 border-danger'>
-				<div className='flex flex-col gap-2 p-3 text-left'>
-					<CardHeader>{character.name}</CardHeader>
+				<div className='flex flex-col gap-2 p-3 '>
+					<CardHeader className='line-clamp-1 text-elipsis'>
+						{character.name}
+					</CardHeader>
+
 					<Badge className='w-full'>{character.status}</Badge>
 					<Badge className='w-full'>{character.species}</Badge>
 					<Badge className='w-full'>{character.location?.name}</Badge>
