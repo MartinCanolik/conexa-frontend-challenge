@@ -1,7 +1,7 @@
-import { Character } from "./CharactersContainer";
 import { Card, CardHeader } from "./ui/card";
 import Image from "next/image";
 import { Badge } from "./ui/badge";
+import { Character } from "@/utils/types";
 
 export default function CharactersCard(character: Character) {
 	return (

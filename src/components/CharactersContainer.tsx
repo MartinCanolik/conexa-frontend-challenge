@@ -1,30 +1,12 @@
 "use client";
 
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import CharactersCard from "./characterCard";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-
-export interface Character {
-	id: number;
-	name: string;
-	status: string;
-	species: string;
-	type: string;
-	gender: string;
-	origin: Location;
-	location: Location;
-	image: string;
-	episode: string[];
-	url: string;
-	created: Date;
-}
-
-export interface Location {
-	name: string;
-	url: string;
-}
+import { Input } from "@/components/ui/input";
+import { Character } from "@/utils/types";
+import { useCharactersQuery } from "@/hooks/useCharactersQuery";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -37,41 +19,9 @@ export default function CharacterContainer({
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value);
 	};
-	console.log(searchTerm);
-	const fetchCharacters = async ({ pageParam = 1 }) => {
-		const searchQuery = searchTerm
-			? `&name=${encodeURIComponent(searchTerm)}`
-			: "";
-		const response = await fetch(
-			`https://rickandmortyapi.com/api/character/?page=${pageParam}${searchQuery}`
-		);
 
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
-		}
-
-		return response.json();
-	};
-	const {
-		data,
-		fetchNextPage,
-		hasNextPage,
-		isFetchingNextPage,
-		isLoading,
-		isError,
-		error,
-	} = useInfiniteQuery({
-		queryKey: ["characters", searchTerm],
-		queryFn: fetchCharacters,
-		getNextPageParam: (lastPage) => {
-			return lastPage.info.next
-				? Number.parseInt(
-						new URL(lastPage.info.next).searchParams.get("page") || "1"
-				  )
-				: undefined;
-		},
-		initialPageParam: 1,
-	});
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useCharactersQuery(searchTerm);
 
 	const lastCharacterRef = useCallback(
 		(node: HTMLDivElement | null) => {
@@ -99,29 +49,31 @@ export default function CharacterContainer({
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
 			<div className='relative mb-4'>
-				<input
+				<Input
 					type='text'
 					placeholder='Search by character name...'
-					className='w-full bg-[#1a1e26] border border-gray-700 rounded-md pl-10 py-2 text-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-500'
+					className='w-full pl-10 py-2'
 					value={searchTerm}
 					onChange={handleSearch}
 				/>
+
 				<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
-			<ScrollArea className='grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[600px] pr-2'>
-				{characters?.map((character, idx) => {
-					const isLastPage = idx === characters.length - 1;
-					return (
-						<>
-							{isLastPage && <div ref={lastCharacterRef}></div>}
-
+			{characters.length === 0 ? (
+				<div className='text-center py-8'>No characters found</div>
+			) : (
+				<ScrollArea className='grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[600px] pr-2'>
+					{characters?.map((character, idx) => {
+						const isLastCard = idx === characters.length - 1;
+						return (
 							<div key={character.id}>
+								{isLastCard && <div ref={lastCharacterRef}></div>}
 								<CharactersCard {...character} />
 							</div>
-						</>
-					);
-				})}
-			</ScrollArea>
+						);
+					})}
+				</ScrollArea>
+			)}
 			{isFetchingNextPage && (
 				<div className='col-span-2 text-center py-4'>Loading more...</div>
 			)}
