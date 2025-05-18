@@ -2,11 +2,11 @@
 
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useCallback, useRef, useState } from "react";
-import CharactersCard from "./characterCard";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Character } from "@/utils/types";
 import { useCharactersQuery } from "@/hooks/useCharactersQuery";
+import CharacterCard from "./CharacterCard";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -68,7 +68,10 @@ export default function CharacterContainer({
 						return (
 							<div key={character.id}>
 								{isLastCard && <div ref={lastCharacterRef}></div>}
-								<CharactersCard {...character} />
+								<CharacterCard
+									character={character}
+									characterContainerId={characterContainerId}
+								/>
 							</div>
 						);
 					})}
