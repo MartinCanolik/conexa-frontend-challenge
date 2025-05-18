@@ -66,20 +66,18 @@ export default function CharacterContainer({
 					{characters?.map((character, idx) => {
 						const isLastCard = idx === characters.length - 1;
 						return (
-							<>
-								<div key={character.id}>
-									<CharactersCard
-										characterId={character.id}
-										characterContainerID={characterContainerId}
-										characterName={character.name}
-										status={character.status}
-										species={character.species}
-										gender={character.gender}
-										image={character.image}
-									/>
-								</div>
+							<div key={character.id}>
+								<CharactersCard
+									characterId={character.id}
+									characterContainerID={characterContainerId}
+									characterName={character.name}
+									status={character.status}
+									species={character.species}
+									gender={character.gender}
+									image={character.image}
+								/>
 								{isLastCard && <div ref={lastCharacterRef}></div>}
-							</>
+							</div>
 						);
 					})}
 				</ScrollArea>

@@ -1,7 +1,7 @@
 import { Card, CardHeader } from "./ui/card";
 import Image from "next/image";
 import { Badge } from "./ui/badge";
-import { Character } from "@/utils/types";
+import { useCharacterSelectionStore } from "@/store/characterSelectionStore";
 
 type CharacterCardProps = {
 	characterId: number;
@@ -22,9 +22,16 @@ export default function CharactersCard({
 	image,
 	species,
 }: CharacterCardProps) {
+	const setSelectedCharacters = useCharacterSelectionStore(
+		(state) => state.setSelectedCharacters
+	);
+
+	const characterPosition = `character${characterContainerID + 1}`;
+
 	return (
 		<Card
 			key={characterId}
+			onClick={() => setSelectedCharacters(characterPosition, characterId)}
 			className='max-width-[100px] p-0 gap-0 flex flex-row rounded-lg overflow-hidden border transition-all duration-300 cursor-pointer'>
 			<div className='w-1/3 border-1 border-white'>
 				<Image
