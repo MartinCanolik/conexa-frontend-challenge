@@ -3,29 +3,10 @@
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useCallback, useRef, useState } from "react";
 import CharactersCard from "./characterCard";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-import { useDebounce } from "@/hooks/useDebounce";
-
-export interface Character {
-	id: number;
-	name: string;
-	status: string;
-	species: string;
-	type: string;
-	gender: string;
-	origin: Location;
-	location: Location;
-	image: string;
-	episode: string[];
-	url: string;
-	created: Date;
-}
-
-export interface Location {
-	name: string;
-	url: string;
-}
+import { Input } from "@/components/ui/input";
+import { Character } from "@/utils/types";
+import { useCharactersQuery } from "@/hooks/useCharactersQuery";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -39,43 +20,8 @@ export default function CharacterContainer({
 		setSearchTerm(e.target.value);
 	};
 
-	const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-	const fetchCharacters = async ({ pageParam = 1 }) => {
-		const searchQuery = debouncedSearchTerm
-			? `&name=${encodeURIComponent(debouncedSearchTerm)}`
-			: "";
-		const response = await fetch(
-			`https://rickandmortyapi.com/api/character/?page=${pageParam}${searchQuery}`
-		);
-
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
-		}
-
-		return response.json();
-	};
-
-	const {
-		data,
-		fetchNextPage,
-		hasNextPage,
-		isFetchingNextPage,
-		isLoading,
-		isError,
-		error,
-	} = useInfiniteQuery({
-		queryKey: ["characters", debouncedSearchTerm],
-		queryFn: fetchCharacters,
-		getNextPageParam: (lastPage) => {
-			return lastPage.info.next
-				? Number.parseInt(
-						new URL(lastPage.info.next).searchParams.get("page") || "1"
-				  )
-				: undefined;
-		},
-		initialPageParam: 1,
-	});
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useCharactersQuery(searchTerm);
 
 	const lastCharacterRef = useCallback(
 		(node: HTMLDivElement | null) => {
@@ -103,13 +49,14 @@ export default function CharacterContainer({
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
 			<div className='relative mb-4'>
-				<input
+				<Input
 					type='text'
 					placeholder='Search by character name...'
-					className='w-full bg-[#1a1e26] border border-gray-700 rounded-md pl-10 py-2 text-gray-300 focus:outline-none focus:ring-1 focus:ring-gray-500'
+					className='w-full pl-10 py-2'
 					value={searchTerm}
 					onChange={handleSearch}
 				/>
+
 				<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
 			{characters.length === 0 ? (
@@ -121,7 +68,15 @@ export default function CharacterContainer({
 						return (
 							<>
 								<div key={character.id}>
-									<CharactersCard {...character} />
+									<CharactersCard
+										characterId={character.id}
+										characterContainerID={characterContainerId}
+										characterName={character.name}
+										status={character.status}
+										species={character.species}
+										gender={character.gender}
+										image={character.image}
+									/>
 								</div>
 								{isLastCard && <div ref={lastCharacterRef}></div>}
 							</>
