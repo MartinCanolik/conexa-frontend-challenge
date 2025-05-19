@@ -2,7 +2,7 @@ export function Spinner() {
 	return (
 		<div className='relative mx auto w-20 left-[50%]'>
 			<svg
-				fill='oklch(0.488 0.243 264.376)'
+				fill='oklch(0.707 0.022 261.325)'
 				width={30}
 				height={30}
 				className='absolute top-0'
