@@ -82,9 +82,7 @@
 	* {
 		@apply border-border outline-ring/50;
 	}
-	html {
-		height: 100%;
-	}
+
 	body {
 		background-image: linear-gradient(
 			135deg,

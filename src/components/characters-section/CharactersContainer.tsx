@@ -1,12 +1,12 @@
 "use client";
 
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useCallback, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Character } from "@/utils/types";
 import { useCharactersQuery } from "@/hooks/useCharactersQuery";
 import CharacterCard from "./CharacterCard";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -44,7 +44,7 @@ export default function CharacterContainer({
 		data?.pages.flatMap((page) => page.results) || [];
 
 	return (
-		<div className='bg-slate-900 p-6 rounded-lg min-h-screen border-1 border-gray-700'>
+		<div className='bg-slate-900 w-[650px] h-2/3 p-6 rounded-lg border-1 border-gray-700'>
 			<h2 className='text-xl font-bold mb-4'>
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
@@ -62,21 +62,24 @@ export default function CharacterContainer({
 			{characters.length === 0 ? (
 				<div className='text-center py-8'>No characters found</div>
 			) : (
-				<ScrollArea className='grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[600px] pr-2'>
-					{characters?.map((character, idx) => {
-						const isLastCard = idx === characters.length - 1;
-						return (
-							<div key={character.id}>
-								{isLastCard && <div ref={lastCharacterRef}></div>}
-								<CharacterCard
-									character={character}
-									characterContainerId={characterContainerId}
-								/>
-							</div>
-						);
-					})}
+				<ScrollArea className=''>
+					<div className='grid grid-cols-1 sm:grid-cols-2 object-contain gap-4 h-full max-h-[600px] pr-2'>
+						{characters?.map((character, idx) => {
+							const isLastCard = idx === characters.length - 1;
+							return (
+								<div key={character.id}>
+									{isLastCard && <div ref={lastCharacterRef}></div>}
+									<CharacterCard
+										character={character}
+										characterContainerId={characterContainerId}
+									/>
+								</div>
+							);
+						})}
+					</div>
 				</ScrollArea>
 			)}
+
 			{isFetchingNextPage && (
 				<div className='col-span-2 text-center py-4'>Loading more...</div>
 			)}

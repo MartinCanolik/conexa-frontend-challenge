@@ -1,12 +1,12 @@
-import { Card, CardHeader } from "./ui/card";
+import { Card, CardHeader } from "../ui/card";
 import Image from "next/image";
-import { Badge } from "./ui/badge";
+import { Badge } from "../ui/badge";
 import { useCharacterSelectionStore } from "@/store/characterSelectionStore";
 import { Character } from "@/utils/types";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 
-type CharactersCardType = {
+type CharactersCardProps = {
 	character: Character;
 	characterContainerId: number;
 };
@@ -14,7 +14,7 @@ type CharactersCardType = {
 export default function CharacterCard({
 	character,
 	characterContainerId,
-}: CharactersCardType) {
+}: CharactersCardProps) {
 	const setSelectedCharacters = useCharacterSelectionStore(
 		(state) => state.setSelectedCharacters
 	);
@@ -28,7 +28,7 @@ export default function CharacterCard({
 		const selectedCharactersKeys = Object.keys(selectedCharacters);
 		const isCharacterSelected = selectedCharactersKeys.some(
 			(key) =>
-				selectedCharacters[key as keyof typeof selectedCharacters] ===
+				selectedCharacters[key as keyof typeof selectedCharacters]?.id ===
 				character.id
 		);
 		if (isCharacterSelected) {
@@ -37,11 +37,12 @@ export default function CharacterCard({
 				action: <X className='h-5 w-5 mr-2 text-red-500' />,
 			});
 		} else {
-			setSelectedCharacters(characterPosition, character.id);
+			setSelectedCharacters(characterPosition, character);
 		}
 	};
 	const characterClicked =
-		selectedCharacters[characterPosition as keyof typeof selectedCharacters];
+		selectedCharacters[characterPosition as keyof typeof selectedCharacters]
+			?.id;
 	const isSelected = characterClicked === character.id;
 
 	const selectedClass =

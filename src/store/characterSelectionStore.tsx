@@ -1,21 +1,22 @@
+import { Character } from "@/utils/types";
 import { create } from "zustand";
-type SelectedCharacters = { character1: number; character2: number };
+type SelectedCharacters = { character1?: Character; character2?: Character };
 export type CharacterSelectionStore = {
 	selectedCharacters: SelectedCharacters;
 	setSelectedCharacters: (
 		characterPosition: string,
-		characterID: number
+		character: Character
 	) => void;
 };
 
 export const useCharacterSelectionStore = create<CharacterSelectionStore>(
 	(set) => ({
-		selectedCharacters: { character1: 0, character2: 0 },
-		setSelectedCharacters: (characterPosition, characterID) => {
+		selectedCharacters: {},
+		setSelectedCharacters: (characterPosition, character) => {
 			set((state) => ({
 				selectedCharacters: {
 					...state.selectedCharacters,
-					[characterPosition]: characterID,
+					[characterPosition]: character,
 				},
 			}));
 		},

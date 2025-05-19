@@ -1,4 +1,5 @@
-import CharacterContainer from "@/components/CharactersContainer";
+import CharacterContainer from "@/components/characters-section/CharactersContainer";
+import EpisodesContainer from "@/components/episodes-section/EpisodesContainer";
 
 export default function Home() {
 	return (
@@ -7,6 +8,7 @@ export default function Home() {
 				{Array.from({ length: 2 }).map((_, idx) => (
 					<CharacterContainer key={idx} characterContainerId={idx} />
 				))}
+				<EpisodesContainer />
 			</div>
 		</div>
 	);
