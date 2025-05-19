@@ -23,22 +23,30 @@ export default function EpisodesContainer() {
 	);
 
 	return (
-		<section className='grid grid-cols-3 gap-4'>
-			<EpisodesList
-				episodesURL={characterLeftEpisodes}
-				title={`${characterLeft?.name} only episodes`}
-				id='left'
-			/>
-			<EpisodesList
-				episodesURL={sharedEpisodes}
-				title={`characters ${characterLeft?.name} and ${characterRight?.name} - shared episodes`}
-				id='shared'
-			/>
-			<EpisodesList
-				episodesURL={characterRightEpisodes}
-				title={`${characterRight?.name} only episodes`}
-				id='right'
-			/>
+		<section className='container relative flex flex-col mt-5 bg-slate-900 w-full h-[40vh] p-6 rounded-lg border-1 border-gray-700'>
+			{!characterLeftEpisodes || !characterRightEpisodes ? (
+				<h1 className='text-xl mx-auto font-bold mb-4'>
+					Choose both characters to see the results ..
+				</h1>
+			) : (
+				<div className='flex flex-row items-center justify-center gap-10'>
+					<EpisodesList
+						episodesURL={characterLeftEpisodes}
+						title={`${characterLeft?.name} - only episodes`}
+						id='left'
+					/>
+					<EpisodesList
+						id='shared'
+						episodesURL={sharedEpisodes}
+						title={`Shared episodes`}
+					/>
+					<EpisodesList
+						episodesURL={characterRightEpisodes}
+						title={`${characterRight?.name} - only episodes`}
+						id='right'
+					/>
+				</div>
+			)}
 		</section>
 	);
 }

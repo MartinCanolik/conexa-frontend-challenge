@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardHeader } from "../ui/card";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
@@ -48,7 +50,7 @@ export default function CharacterCard({
 	const selectedClass =
 		isSelected &&
 		"border-green-400 border-2 shadow-[0_0_10px_rgba(74,222,128,0.5)] ring-1 ring-green-400";
-
+	const badgeStyle = "w-full py-0 my-1 text-xs";
 	return (
 		<Card
 			key={character.id}
@@ -64,12 +66,14 @@ export default function CharacterCard({
 				/>
 			</div>
 			<div className='w-2/3 border-2 border-danger'>
-				<div className='flex flex-col gap-2 p-3 '>
-					<CardHeader className=''>{character.name}</CardHeader>
+				<div className='flex flex-col pb-2 mx-4'>
+					<CardHeader className='overflow-hidden whitespace-nowrap text-ellipsis'>
+						{character.name}
+					</CardHeader>
 
-					<Badge className='w-full'>{character.status}</Badge>
-					<Badge className='w-full'>{character.species}</Badge>
-					<Badge className='w-full'>{character.gender}</Badge>
+					<Badge className={badgeStyle}>{character.status}</Badge>
+					<Badge className={badgeStyle}>{character.species}</Badge>
+					<Badge className={badgeStyle}>{character.gender}</Badge>
 				</div>
 			</div>
 		</Card>
