@@ -45,10 +45,10 @@ export default function CharacterContainer({
 
 	return (
 		<div className='flex flex-col bg-slate-900 h-[65vh] w-[650px] p-6 rounded-lg border-1 border-gray-700'>
-			<h2 className='text-xl font-bold mb-4'>
+			<h2 className='text-xl font-bold mb-4 px-4'>
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
-			<div className='relative mb-4'>
+			<div className='relative mb-4 px-4'>
 				<Input
 					type='text'
 					placeholder='Search by character name...'
@@ -57,7 +57,7 @@ export default function CharacterContainer({
 					onChange={handleSearch}
 				/>
 
-				<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
+				<Search className='absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
 			<div className='flex-1 flex flex-col h-[350px]'>
 				{characters.length === 0 ? (
@@ -65,7 +65,7 @@ export default function CharacterContainer({
 				) : (
 					<div className='relative flex-1 overflow-hidden'>
 						<ScrollArea className='h-full w-full'>
-							<div className='grid grid-cols-1 sm:grid-cols-2 object-contain gap-4 h-full max-h-[600px] pr-4'>
+							<div className='grid grid-cols-1 sm:grid-cols-2 object-contain gap-4 h-full max-h-[600px] p-4'>
 								{characters?.map((character, idx) => {
 									const isLastCard = idx === characters.length - 1;
 									return (

@@ -13,7 +13,12 @@ export default function NavBar() {
 				/>
 			</div>
 			<div className='flex items-center justify-center'>
-				<h1 className='text-bold text-3xl font-bold'>by</h1>
+				<Image
+					width={35}
+					height={35}
+					src='https://res.cloudinary.com/drhj3sc2o/image/upload/v1747687822/uzg2hmtvgmzmfoyx26yy.svg'
+					alt='by'
+				/>
 			</div>
 			<div className='flex items-center justify-center'>
 				<ConexaSVG />
