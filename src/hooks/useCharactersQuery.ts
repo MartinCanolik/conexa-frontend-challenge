@@ -2,7 +2,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { RICK_AND_MORTY_API_URL } from "@/utils/constants";
 import { useDebounce } from "@/hooks/useDebounce";
 
-export function useCharactersQuery(searchTerm: string) {
+export function useCharactersQuery(
+	searchTerm: string,
+	characterContainerId: number
+) {
 	const debouncedSearchTerm = useDebounce(searchTerm, 500);
 	const fetchCharacters = async ({ pageParam = 1 }) => {
 		const searchQuery = debouncedSearchTerm
@@ -20,7 +23,7 @@ export function useCharactersQuery(searchTerm: string) {
 	};
 
 	const query = useInfiniteQuery({
-		queryKey: ["characters", debouncedSearchTerm],
+		queryKey: [`characters${characterContainerId}`, debouncedSearchTerm],
 		queryFn: fetchCharacters,
 		getNextPageParam: (lastPage) => {
 			return lastPage.info.next

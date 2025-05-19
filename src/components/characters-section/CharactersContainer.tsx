@@ -7,6 +7,7 @@ import { Character } from "@/utils/types";
 import { useCharactersQuery } from "@/hooks/useCharactersQuery";
 import CharacterCard from "./CharacterCard";
 import { ScrollArea } from "../ui/scroll-area";
+import { Spinner } from "../ui/spinner";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -21,7 +22,7 @@ export default function CharacterContainer({
 	};
 
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useCharactersQuery(searchTerm);
+		useCharactersQuery(searchTerm, characterContainerId);
 
 	const lastCharacterRef = useCallback(
 		(node: HTMLDivElement | null) => {
@@ -59,7 +60,7 @@ export default function CharacterContainer({
 
 				<Search className='absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
-			<div className='flex-1 flex flex-col h-[350px]'>
+			<div className='flex-1 flex flex-col pb-3 h-[350px]'>
 				{characters.length === 0 ? (
 					<div className='text-center py-8'>No characters found</div>
 				) : (
@@ -82,9 +83,7 @@ export default function CharacterContainer({
 						</ScrollArea>
 					</div>
 				)}
-				{isFetchingNextPage && (
-					<div className='col-span-2 text-center'>Loading more...</div>
-				)}
+				{isFetchingNextPage && <Spinner />}
 			</div>
 		</div>
 	);
