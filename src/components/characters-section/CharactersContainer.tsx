@@ -1,12 +1,12 @@
 "use client";
 
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useCallback, useRef, useState } from "react";
-import CharactersCard from "./characterCard";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Character } from "@/utils/types";
 import { useCharactersQuery } from "@/hooks/useCharactersQuery";
+import CharacterCard from "./CharacterCard";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -44,7 +44,7 @@ export default function CharacterContainer({
 		data?.pages.flatMap((page) => page.results) || [];
 
 	return (
-		<div className='bg-slate-900 p-6 rounded-lg min-h-screen border-1 border-gray-700'>
+		<div className='flex flex-col bg-slate-900 h-[65vh] w-[650px] p-6 rounded-lg border-1 border-gray-700'>
 			<h2 className='text-xl font-bold mb-4'>
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
@@ -59,32 +59,33 @@ export default function CharacterContainer({
 
 				<Search className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
-			{characters.length === 0 ? (
-				<div className='text-center py-8'>No characters found</div>
-			) : (
-				<ScrollArea className='grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-y-auto max-h-[600px] pr-2'>
-					{characters?.map((character, idx) => {
-						const isLastCard = idx === characters.length - 1;
-						return (
-							<div key={character.id}>
-								<CharactersCard
-									characterId={character.id}
-									characterContainerID={characterContainerId}
-									characterName={character.name}
-									status={character.status}
-									species={character.species}
-									gender={character.gender}
-									image={character.image}
-								/>
-								{isLastCard && <div ref={lastCharacterRef}></div>}
+			<div className='flex-1 flex flex-col h-[350px]'>
+				{characters.length === 0 ? (
+					<div className='text-center py-8'>No characters found</div>
+				) : (
+					<div className='relative flex-1 overflow-hidden'>
+						<ScrollArea className='h-full w-full'>
+							<div className='grid grid-cols-1 sm:grid-cols-2 object-contain gap-4 h-full max-h-[600px] pr-4'>
+								{characters?.map((character, idx) => {
+									const isLastCard = idx === characters.length - 1;
+									return (
+										<div key={character.id}>
+											{isLastCard && <div ref={lastCharacterRef}></div>}
+											<CharacterCard
+												character={character}
+												characterContainerId={characterContainerId}
+											/>
+										</div>
+									);
+								})}
 							</div>
-						);
-					})}
-				</ScrollArea>
-			)}
-			{isFetchingNextPage && (
-				<div className='col-span-2 text-center py-4'>Loading more...</div>
-			)}
+						</ScrollArea>
+					</div>
+				)}
+				{isFetchingNextPage && (
+					<div className='col-span-2 text-center'>Loading more...</div>
+				)}
+			</div>
 		</div>
 	);
 }

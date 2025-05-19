@@ -1,10 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useDebounce } from "./useDebounce";
 import { RICK_AND_MORTY_API_URL } from "@/utils/constants";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export function useCharactersQuery(searchTerm: string) {
 	const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
 	const fetchCharacters = async ({ pageParam = 1 }) => {
 		const searchQuery = debouncedSearchTerm
 			? `&name=${encodeURIComponent(debouncedSearchTerm)}`
