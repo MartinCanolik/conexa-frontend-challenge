@@ -46,7 +46,7 @@ export default function CharacterContainer({
 
 	return (
 		<div className='flex flex-col bg-slate-900 h-[65vh] w-[650px] p-6 rounded-lg border-1 border-gray-700'>
-			<h2 className='text-xl font-bold mb-4 px-4'>
+			<h2 className='text-xl font-bold mb-3 px-4'>
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
 			<div className='relative mb-4 px-4'>
@@ -60,7 +60,7 @@ export default function CharacterContainer({
 
 				<Search className='absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
 			</div>
-			<div className='flex-1 flex flex-col pb-3 h-[350px]'>
+			<div className='flex-1 flex flex-col pb-2 h-[350px]'>
 				{characters.length === 0 ? (
 					<div className='text-center py-8'>No characters found</div>
 				) : (

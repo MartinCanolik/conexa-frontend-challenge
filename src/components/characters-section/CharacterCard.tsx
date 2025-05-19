@@ -66,7 +66,7 @@ export default function CharacterCard({
 				/>
 			</div>
 			<div className='w-2/3 border-2 border-danger'>
-				<div className='flex flex-col pb-2 mx-4'>
+				<div className='flex flex-col py-2 mx-4'>
 					<CardHeader className='overflow-hidden whitespace-nowrap text-ellipsis'>
 						{character.name}
 					</CardHeader>
