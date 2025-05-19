@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
@@ -9,9 +9,9 @@ const geistSans = Geist({
 	subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
+const jetBrainsMono = JetBrains_Mono({
 	subsets: ["latin"],
+	display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,8 +26,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html>
-			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+			<body className={`${jetBrainsMono.className} ${geistSans.variable}`}>
 				<Toaster />
 				<Providers>
 					<main>{children}</main>
