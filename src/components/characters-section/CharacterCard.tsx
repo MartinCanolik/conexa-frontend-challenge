@@ -3,10 +3,8 @@
 import { Card, CardHeader } from "../ui/card";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
-import { useCharacterSelectionStore } from "@/store/characterSelectionStore";
 import { Character } from "@/utils/types";
-import { toast } from "sonner";
-import { X } from "lucide-react";
+import { useCharacterCard } from "@/components/characters-section/useCharacterCard";
 
 type CharactersCardProps = {
 	character: Character;
@@ -14,43 +12,22 @@ type CharactersCardProps = {
 };
 
 export default function CharacterCard({
-	character,
 	characterContainerId,
+	character,
 }: CharactersCardProps) {
-	const setSelectedCharacters = useCharacterSelectionStore(
-		(state) => state.setSelectedCharacters
-	);
-	const selectedCharacters = useCharacterSelectionStore(
-		(state) => state.selectedCharacters
+	const { handleSelectCharacter, characterClicked } = useCharacterCard(
+		characterContainerId,
+		character
 	);
 
-	const characterPosition = `character${characterContainerId + 1}`;
-
-	const handleSelectCharacter = () => {
-		const selectedCharactersKeys = Object.keys(selectedCharacters);
-		const isCharacterSelected = selectedCharactersKeys.some(
-			(key) =>
-				selectedCharacters[key as keyof typeof selectedCharacters]?.id ===
-				character.id
-		);
-		if (isCharacterSelected) {
-			toast("Character already selected", {
-				description: "Select a difrent card",
-				action: <X className='h-5 w-5 mr-2 text-red-500' />,
-			});
-		} else {
-			setSelectedCharacters(characterPosition, character);
-		}
-	};
-	const characterClicked =
-		selectedCharacters[characterPosition as keyof typeof selectedCharacters]
-			?.id;
 	const isSelected = characterClicked === character.id;
 
 	const selectedClass =
 		isSelected &&
 		"border-green-400 border-2 shadow-[0_0_10px_rgba(74,222,128,0.5)] ring-1 ring-green-400";
+
 	const badgeStyle = "w-full py-0 my-1 text-xs";
+
 	return (
 		<Card
 			key={character.id}
@@ -65,9 +42,9 @@ export default function CharacterCard({
 					className='w-full h-full object-cover transition-transform duration-300 hover:scale-110'
 				/>
 			</div>
-			<div className='w-2/3 border-2 border-danger'>
+			<div className='w-2/3'>
 				<div className='flex flex-col py-2 mx-4'>
-					<CardHeader className='overflow-hidden whitespace-nowrap text-ellipsis'>
+					<CardHeader className='line-clamp-1 whitespace-nowrap text-ellipsis'>
 						{character.name}
 					</CardHeader>
 
