@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Character } from "@/utils/types";
 import { useCharacterCard } from "@/components/characters-section/useCharacterCard";
+import { getSelectedCharacterCardClass } from "@/utils/functions";
 
 type CharactersCardProps = {
 	character: Character;
@@ -22,17 +23,15 @@ export default function CharacterCard({
 
 	const isSelected = characterClicked === character.id;
 
-	const selectedClass =
-		isSelected &&
-		"border-green-400 border-2 shadow-[0_0_10px_rgba(74,222,128,0.5)] ring-1 ring-green-400";
-
 	const badgeStyle = "w-full py-0 my-1 text-xs";
 
 	return (
 		<Card
 			key={character.id}
 			onClick={handleSelectCharacter}
-			className={`max-width-[100px] p-0 gap-0  flex flex-row rounded-lg overflow-hidden hover:border-gray-500 border transition-all duration-200 cursor-pointer ${selectedClass}`}>
+			className={`max-width-[100px] p-0 gap-0  flex flex-row rounded-lg overflow-hidden hover:border-gray-500 border transition-all duration-200 cursor-pointer ${getSelectedCharacterCardClass(
+				isSelected
+			)}`}>
 			<div className='w-1/3 border-1 border-white'>
 				<Image
 					src={character.image}

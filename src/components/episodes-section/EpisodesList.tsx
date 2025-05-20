@@ -16,7 +16,9 @@ export default function EpisodesList({
 	id,
 }: EpisodesListProps) {
 	const { data } = useEpisodes(episodesURL, id);
-	console.log(data);
+
+	if (!data) return <p>No shared episodes found.</p>;
+
 	return (
 		<div className='flex flex-col h-[35vh] rounded-lg px-10 gap-2 py-3 border-1 border-gray-700'>
 			<h2 className='text-xl text-center font-bold mb-2'>{title}</h2>
@@ -30,8 +32,8 @@ export default function EpisodesList({
 									className='flex flex-col gap-0 py-3 justify-center items-center'
 									key={idx}>
 									<h3 className='font-bold text-md'>{episode.name}</h3>
-									<Badge className='w-1/3 py-0 my-2'>{episode.air_date}</Badge>
-									<Badge className='w-1/3 py-0 my-1'>{episode.episode}</Badge>
+									<Badge className='w-full py-0 my-2'>{episode.air_date}</Badge>
+									<Badge className='w-full py-0 my-1'>{episode.episode}</Badge>
 								</Card>
 							);
 						})}
