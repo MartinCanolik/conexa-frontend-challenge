@@ -32,8 +32,10 @@ export default function EpisodesList({
 									className='flex flex-col gap-0 py-3 justify-center items-center'
 									key={idx}>
 									<h3 className='font-bold text-md'>{episode.name}</h3>
-									<Badge className='w-full py-0 my-2'>{episode.air_date}</Badge>
-									<Badge className='w-full py-0 my-1'>{episode.episode}</Badge>
+									<Badge className='w-[70%] py-0 my-2'>
+										{episode.air_date}
+									</Badge>
+									<Badge className='w-[70%] py-0 my-2'>{episode.episode}</Badge>
 								</Card>
 							);
 						})}
