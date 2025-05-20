@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
+
 import { Character } from "@/utils/types";
-import { useCharactersQuery } from "@/hooks/useCharactersQuery";
 import CharacterCard from "./CharacterCard";
 import { ScrollArea } from "../ui/scroll-area";
 import { Spinner } from "../ui/spinner";
+import { useCharacatersContainer } from "./useCharactersContainer";
+import SearchBar from "./SearchBar";
 
 export default function CharacterContainer({
 	characterContainerId,
@@ -15,31 +15,13 @@ export default function CharacterContainer({
 	characterContainerId: number;
 }) {
 	const [searchTerm, setSearchTerm] = useState("");
-	const observer = useRef<IntersectionObserver | null>(null);
 
 	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(e.target.value);
 	};
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useCharactersQuery(searchTerm, characterContainerId);
-
-	const lastCharacterRef = useCallback(
-		(node: HTMLDivElement | null) => {
-			if (isFetchingNextPage) return;
-
-			if (observer.current) observer.current.disconnect();
-
-			observer.current = new IntersectionObserver((entries) => {
-				if (entries[0].isIntersecting && hasNextPage) {
-					fetchNextPage();
-				}
-			});
-
-			if (node) observer.current.observe(node);
-		},
-		[isFetchingNextPage, fetchNextPage, hasNextPage]
-	);
+	const { data, lastCharacterRef, isFetchingNextPage } =
+		useCharacatersContainer(searchTerm, characterContainerId);
 
 	const characters: Character[] =
 		data?.pages.flatMap((page) => page.results) || [];
@@ -49,17 +31,7 @@ export default function CharacterContainer({
 			<h2 className='text-xl font-bold mb-3 px-4'>
 				{`Select character# ${characterContainerId + 1}`}
 			</h2>
-			<div className='relative mb-4 px-4'>
-				<Input
-					type='text'
-					placeholder='Search by character name...'
-					className='w-full pl-10 py-2'
-					value={searchTerm}
-					onChange={handleSearch}
-				/>
-
-				<Search className='absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4' />
-			</div>
+			<SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
 			<div className='flex-1 flex flex-col pb-2 h-[350px]'>
 				{characters.length === 0 ? (
 					<div className='text-center py-8'>No characters found</div>

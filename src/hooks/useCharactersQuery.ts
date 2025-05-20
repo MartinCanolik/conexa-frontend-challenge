@@ -22,7 +22,7 @@ export function useCharactersQuery(
 		return response.json();
 	};
 
-	const query = useInfiniteQuery({
+	const charactersQuery = useInfiniteQuery({
 		queryKey: [`characters${characterContainerId}`, debouncedSearchTerm],
 		queryFn: fetchCharacters,
 		getNextPageParam: (lastPage) => {
@@ -36,6 +36,6 @@ export function useCharactersQuery(
 	});
 
 	return {
-		...query,
+		...charactersQuery,
 	};
 }
